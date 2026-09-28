@@ -65,6 +65,7 @@ class Variant {
   stableVariantId: string;
   pathwayId: string;
   programId: any;
+  customAttributes: Record<string, string>;
   audio: (Rendition & {type: 'AUDIO'})[];
   video: (Rendition & {type: 'VIDEO'})[];
   subtitles: (Rendition & {type: 'SUBTITLES'})[];
@@ -86,6 +87,7 @@ class Variant {
     stableVariantId,
     pathwayId,
     programId,
+    customAttributes = {},
     audio = [],
     video = [],
     subtitles = [],
@@ -108,6 +110,7 @@ class Variant {
     this.stableVariantId = stableVariantId;
     this.pathwayId = pathwayId;
     this.programId = programId;
+    this.customAttributes = customAttributes;
     this.audio = audio;
     this.video = video;
     this.subtitles = subtitles;

@@ -2,6 +2,16 @@ const test = require('ava');
 const HLS = require('../../../../..');
 const utils = require('../../../../helpers/utils');
 
+test('preserves custom variant attributes', t => {
+  const input = `#EXTM3U
+#EXT-X-STREAM-INF:BANDWIDTH=6087928,CODECS="mp4a.40.2,avc1.640028",YT-EXT-AUDIO-CONTENT-ID="vi.3",YT-EXT-ABSOLUTE-LOUDNESS=-14.110
+https://example.com/playlist.m3u8`;
+  const variant = HLS.parse(input).variants[0];
+  t.is(variant.customAttributes['YT-EXT-AUDIO-CONTENT-ID'], 'vi.3');
+  t.is(variant.customAttributes['YT-EXT-ABSOLUTE-LOUDNESS'], '-14.110');
+  t.deepEqual(HLS.parse(HLS.stringify(HLS.parse(input))).variants[0].customAttributes, variant.customAttributes);
+});
+
 // The URI line is REQUIRED
 test('#EXT-X-STREAM-INF_01', t => {
   utils.parseFail(t, `

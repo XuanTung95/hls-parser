@@ -218,6 +218,9 @@ function buildVariant(lines: LineArray, variant: Variant) {
   if (variant.programId) {
     attrs.push(`PROGRAM-ID=${variant.programId}`);
   }
+  for (const [key, value] of Object.entries(variant.customAttributes || {})) {
+    attrs.push(`${key}=${/^-?(?:\d+(?:\.\d*)?|\.\d+)$/.test(value) ? value : `"${value}"`}`);
+  }
   lines.push(`${name}:${attrs.join(',')}`);
   if (!variant.isIFrameOnly) {
     lines.push(`${variant.uri}`);

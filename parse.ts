@@ -335,6 +335,32 @@ function matchTypes(attrs, variant, params) {
 }
 
 function parseVariant(lines, variantAttrs, uri: string, iFrameOnly: boolean, params: Record<string, any>): Variant {
+  const knownAttributes = new Set([
+    'URI',
+    'BANDWIDTH',
+    'AVERAGE-BANDWIDTH',
+    'SCORE',
+    'CODECS',
+    'RESOLUTION',
+    'FRAME-RATE',
+    'HDCP-LEVEL',
+    'ALLOWED-CPC',
+    'VIDEO-RANGE',
+    'STABLE-VARIANT-ID',
+    'STABLE-PATHWAY-ID',
+    'PATHWAY-ID',
+    'PROGRAM-ID',
+    'AUDIO',
+    'VIDEO',
+    'SUBTITLES',
+    'CLOSED-CAPTIONS'
+  ]);
+  const customAttributes = {};
+  for (const [key, value] of Object.entries(variantAttrs)) {
+    if (!knownAttributes.has(key)) {
+      customAttributes[key] = String(value);
+    }
+  }
   const variant = new Variant({
     uri,
     bandwidth: variantAttrs['BANDWIDTH'],
@@ -348,7 +374,8 @@ function parseVariant(lines, variantAttrs, uri: string, iFrameOnly: boolean, par
     videoRange: variantAttrs['VIDEO-RANGE'],
     stableVariantId: variantAttrs['STABLE-VARIANT-ID'],
     pathwayId: variantAttrs['STABLE-PATHWAY-ID'],
-    programId: variantAttrs['PROGRAM-ID']
+    programId: variantAttrs['PROGRAM-ID'],
+    customAttributes
   });
   for (const line of lines) {
     if (line.name === 'EXT-X-MEDIA') {
